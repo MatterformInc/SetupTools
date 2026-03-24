@@ -1,0 +1,19 @@
+{
+  "defaults": {
+    "autoLogin": false,
+    "autoDnd": false,
+    "restartSchedule": false,
+    "restartTime": "04:00",
+    "disableGameBar": true,
+    "disableInterruptions": true,
+    "powerPerformance": true,
+    "defenderExclusions": true,
+    "defenderExclusionPaths": [],
+    "stability": true
+  },
+  "notes": {
+    "autoLogin": "Requires Administrator. Prompts for credentials.",
+    "restartTime": "24-hour format, e.g. 04:00 or 22:30",
+    "defenderExclusionPaths": "One path per line; saved in config and applied when Defender Exclusions is run."
+  }
+}

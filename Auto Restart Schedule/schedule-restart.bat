@@ -5,7 +5,7 @@ echo.
 echo   Daily restart at a specific time — runs every day, never expires.
 echo   (24-hour, e.g. 04:00)
 echo.
-set /p RESTART_TIME="Enter time (HH:MM): "
+if "%~1"=="" (set /p RESTART_TIME="Enter time (HH:MM): ") else (set "RESTART_TIME=%~1")
 
 if "%RESTART_TIME%"=="" (
     echo No time entered. Exiting.
