@@ -9,7 +9,11 @@
     "powerPerformance": true,
     "defenderExclusions": true,
     "defenderExclusionPaths": [],
-    "stability": true
+    "stability": true,
+    "autoTimeZone": true,
+    "taskbarMainOnly": true,
+    "darkMode": true,
+    "gpuPcieCheck": true
   },
   "notes": {
     "autoLogin": "Requires Administrator. Prompts for credentials.",

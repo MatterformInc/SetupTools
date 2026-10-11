@@ -25,7 +25,11 @@ Example **config.json**:
     "disableInterruptions": true,
     "powerPerformance": true,
     "defenderExclusions": true,
-    "stability": true
+    "stability": true,
+    "autoTimeZone": true,
+    "taskbarMainOnly": true,
+    "darkMode": true,
+    "gpuPcieCheck": true
   }
 }
 ```
@@ -62,6 +66,15 @@ Example **config.json**:
 ### Stability
 - **stability-settings.bat** — Turns off Delivery Optimization (no uploading to other PCs); sets visual effects to “best performance” and disables some animations. *Run as Administrator* for delivery optimization.
 
+### Desktop Preferences
+- **set-time-zone-automatically.bat** — Turns on *Set time zone automatically* and time sync. Also turns on Location services, which Windows needs to detect the time zone. *Run as Administrator.*
+- **disable-taskbar-all-displays.bat** — Turns off *Show my taskbar on all displays* (taskbar on the main display only) and restarts Explorer.
+- **enable-dark-mode.bat** — Sets Windows and apps to dark mode.
+
+### GPU PCIe Check
+- **check-gpu-pcie.bat** — Reports each PCIe GPU's current vs. max link width and speed (vendor-neutral, via Windows device properties). Fails if the card runs below full width (e.g. a 4090 at x1 instead of x16) and prints the likely causes: card not seated / sagging, bad riser, wrong slot or shared lanes, BIOS slot setting. Link *speed* below max is only a note, since GPUs drop speed at idle. No admin needed.
+- **check-gpu-pcie.ps1** — The check itself; exits 1 if any GPU is below full width.
+
 ### Windows Update
 - **README.txt** — Explains Active hours, Pause updates, and restart options (no full control via script on all editions).
 - **open-update-settings.bat** — Opens **Settings > Windows Update**.
@@ -84,6 +97,8 @@ Example **config.json**:
 | No sleep/interruptions  | Disable Interruptions + Power and Performance     |
 | Fewer Defender scans    | Defender Exclusions → defender-exclusions-… (Admin)|
 | No update uploads       | Stability → stability-settings.bat (Admin)        |
+| Auto time zone, taskbar, dark mode | Desktop Preferences → the three .bat files |
+| GPU at full x16?        | GPU PCIe Check → check-gpu-pcie.bat                |
 | Update / restart control| Windows Update → open-update-settings + README    |
 | BIOS / manual checklist | Reminders → show-reminders.bat / README            |
 
@@ -92,4 +107,4 @@ Example **config.json**:
 ## Requirements
 
 - Windows 10/11.
-- Administrator rights for: Auto Login, Disable Game Bar (policy), Power and Performance, Defender Exclusions, Stability (Delivery Optimization).
+- Administrator rights for: Auto Login, Disable Game Bar (policy), Power and Performance, Defender Exclusions, Stability (Delivery Optimization), automatic time zone.

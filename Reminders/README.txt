@@ -21,6 +21,15 @@ BIOS / UEFI
   (e.g. serial, parallel, extra SATA if not used — fewer interrupts)
 
 
+HARDWARE
+--------
+• GPU running at full PCIe width (x16)
+  (Run GPU PCIe Check\check-gpu-pcie.bat. If it reports x1/x4/x8: reseat the
+   card and add an anti-sag bracket, check any riser cable, use the top CPU x16
+   slot (M.2 / second card can share its lanes), and set the slot to Auto or
+   Gen4 x16 in BIOS, not x1 or bifurcated)
+
+
 POWER / COOLING
 ---------------
 • Power limit / thermal limits in BIOS

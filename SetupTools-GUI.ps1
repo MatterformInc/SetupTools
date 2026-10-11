@@ -27,6 +27,10 @@ function Get-Config {
             defenderExclusions = $true
             defenderExclusionPaths = @()
             stability = $true
+            autoTimeZone = $true
+            taskbarMainOnly = $true
+            darkMode = $true
+            gpuPcieCheck = $true
         }
     } | ConvertTo-Json -Depth 5 | ConvertFrom-Json
 }
@@ -42,7 +46,11 @@ function Save-Config {
         [System.Windows.Forms.CheckBox]$cbPower,
         [System.Windows.Forms.CheckBox]$cbDefender,
         [System.Windows.Forms.TextBox]$tbDefenderPaths,
-        [System.Windows.Forms.CheckBox]$cbStability
+        [System.Windows.Forms.CheckBox]$cbStability,
+        [System.Windows.Forms.CheckBox]$cbTimeZone,
+        [System.Windows.Forms.CheckBox]$cbTaskbar,
+        [System.Windows.Forms.CheckBox]$cbDarkMode,
+        [System.Windows.Forms.CheckBox]$cbGpuPcie
     )
     $paths = @($tbDefenderPaths.Text -split "`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' })
     $o = @{
@@ -57,6 +65,10 @@ function Save-Config {
             defenderExclusions = $cbDefender.Checked
             defenderExclusionPaths = $paths
             stability = $cbStability.Checked
+            autoTimeZone = $cbTimeZone.Checked
+            taskbarMainOnly = $cbTaskbar.Checked
+            darkMode = $cbDarkMode.Checked
+            gpuPcieCheck = $cbGpuPcie.Checked
         }
         notes = @{
             autoLogin = 'Requires Administrator. Prompts for credentials.'
@@ -84,7 +96,7 @@ $d = $config.defaults
 
 $form = New-Object System.Windows.Forms.Form
 $form.Text = 'SetupTools'
-$form.Size = New-Object System.Drawing.Size(460, 520)
+$form.Size = New-Object System.Drawing.Size(460, 632)
 $form.StartPosition = 'CenterScreen'
 $form.FormBorderStyle = 'FixedSingle'
 $form.MaximizeBox = $false
@@ -185,6 +197,38 @@ $cbStability.Location = New-Object System.Drawing.Point(20, $y)
 $cbStability.Size = New-Object System.Drawing.Size(360, 24)
 $cbStability.Checked = $d.stability
 $form.Controls.Add($cbStability)
+$y += $rowH
+
+$cbTimeZone = New-Object System.Windows.Forms.CheckBox
+$cbTimeZone.Text = 'Set time zone automatically (enables location) (Admin)'
+$cbTimeZone.Location = New-Object System.Drawing.Point(20, $y)
+$cbTimeZone.Size = New-Object System.Drawing.Size(400, 24)
+$cbTimeZone.Checked = ($d.autoTimeZone -ne $false)
+$form.Controls.Add($cbTimeZone)
+$y += $rowH
+
+$cbTaskbar = New-Object System.Windows.Forms.CheckBox
+$cbTaskbar.Text = 'Taskbar on main display only'
+$cbTaskbar.Location = New-Object System.Drawing.Point(20, $y)
+$cbTaskbar.Size = New-Object System.Drawing.Size(400, 24)
+$cbTaskbar.Checked = ($d.taskbarMainOnly -ne $false)
+$form.Controls.Add($cbTaskbar)
+$y += $rowH
+
+$cbDarkMode = New-Object System.Windows.Forms.CheckBox
+$cbDarkMode.Text = 'Dark mode'
+$cbDarkMode.Location = New-Object System.Drawing.Point(20, $y)
+$cbDarkMode.Size = New-Object System.Drawing.Size(400, 24)
+$cbDarkMode.Checked = ($d.darkMode -ne $false)
+$form.Controls.Add($cbDarkMode)
+$y += $rowH
+
+$cbGpuPcie = New-Object System.Windows.Forms.CheckBox
+$cbGpuPcie.Text = 'Check GPU PCIe link (x16, reseat/riser/BIOS)'
+$cbGpuPcie.Location = New-Object System.Drawing.Point(20, $y)
+$cbGpuPcie.Size = New-Object System.Drawing.Size(400, 24)
+$cbGpuPcie.Checked = ($d.gpuPcieCheck -ne $false)
+$form.Controls.Add($cbGpuPcie)
 $y += $rowH + 8
 
 $btnApply = New-Object System.Windows.Forms.Button
@@ -227,13 +271,17 @@ $btnApply.Add_Click({
         }
     }
     if ($cbStability.Checked)    { Run-Bat 'Stability\stability-settings.bat' }
-    if (-not ($cbAutoLogin.Checked -or $cbAutoDnd.Checked -or $cbRestart.Checked -or $cbGameBar.Checked -or $cbInterruptions.Checked -or $cbPower.Checked -or $cbDefender.Checked -or $cbStability.Checked)) {
+    if ($cbTimeZone.Checked)     { Run-Bat 'Desktop Preferences\set-time-zone-automatically.bat' }
+    if ($cbTaskbar.Checked)      { Run-Bat 'Desktop Preferences\disable-taskbar-all-displays.bat' }
+    if ($cbDarkMode.Checked)     { Run-Bat 'Desktop Preferences\enable-dark-mode.bat' }
+    if ($cbGpuPcie.Checked)      { Run-Bat 'GPU PCIe Check\check-gpu-pcie.bat' }
+    if (-not ($cbAutoLogin.Checked -or $cbAutoDnd.Checked -or $cbRestart.Checked -or $cbGameBar.Checked -or $cbInterruptions.Checked -or $cbPower.Checked -or $cbDefender.Checked -or $cbStability.Checked -or $cbTimeZone.Checked -or $cbTaskbar.Checked -or $cbDarkMode.Checked -or $cbGpuPcie.Checked)) {
         [System.Windows.Forms.MessageBox]::Show("Select at least one option.", "SetupTools", "OK", "Information")
     }
 })
 
 $btnSave.Add_Click({
-    Save-Config -cbAutoLogin $cbAutoLogin -cbAutoDnd $cbAutoDnd -cbRestart $cbRestart -tbRestartTime $tbRestartTime -cbGameBar $cbGameBar -cbInterruptions $cbInterruptions -cbPower $cbPower -cbDefender $cbDefender -tbDefenderPaths $tbDefenderPaths -cbStability $cbStability
+    Save-Config -cbAutoLogin $cbAutoLogin -cbAutoDnd $cbAutoDnd -cbRestart $cbRestart -tbRestartTime $tbRestartTime -cbGameBar $cbGameBar -cbInterruptions $cbInterruptions -cbPower $cbPower -cbDefender $cbDefender -tbDefenderPaths $tbDefenderPaths -cbStability $cbStability -cbTimeZone $cbTimeZone -cbTaskbar $cbTaskbar -cbDarkMode $cbDarkMode -cbGpuPcie $cbGpuPcie
 })
 
 $btnConfig.Add_Click({
