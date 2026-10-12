@@ -75,17 +75,11 @@ set "WL_DOMAIN=%DOMAIN%"
 echo.
 echo Enter your Windows password when prompted...
 echo.
-powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-  "$u=$env:WL_USERNAME; $d=$env:WL_DOMAIN;" ^
-  "$p=Read-Host 'Password' -AsSecureString; " ^
-  "$B=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); $plain=[Runtime.InteropServices.Marshal]::PtrToStringAuto($B); [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($B);" ^
-  "$k='HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon';" ^
-  "Set-ItemProperty -Path $k -Name AutoAdminLogon -Value '1' -Type String -ErrorAction Stop;" ^
-  "Set-ItemProperty -Path $k -Name DefaultUserName -Value $u -Type String -ErrorAction Stop;" ^
-  "Set-ItemProperty -Path $k -Name DefaultPassword -Value $plain -Type String -ErrorAction Stop;" ^
-  "Set-ItemProperty -Path $k -Name DefaultDomainName -Value $d -Type String -ErrorAction Stop;" ^
-  "exit 0"
-if errorlevel 1 goto :reg_fail
+:: Checks the password, then writes the registry. Exit 0 = ok, 2 = password rejected, 3 = registry failed.
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0set-auto-login.ps1"
+set "RC=%errorlevel%"
+if "%RC%"=="2" goto :done
+if not "%RC%"=="0" goto :reg_fail
 
 echo.
 echo Auto-login has been ENABLED.
@@ -93,6 +87,7 @@ echo Restart your PC to test. You will log in automatically.
 goto :done
 
 :reg_fail
+if "%RC%"=="0" set "RC=1"
 echo.
 echo Registry update failed. Common causes:
 echo   - Not run as Administrator (right-click ^> Run as administrator)
@@ -107,3 +102,5 @@ goto :done
 
 echo.
 pause
+:: Report the real result (pause would otherwise make every run exit 0 = "success").
+exit /b %RC%

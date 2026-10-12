@@ -8,7 +8,7 @@ Run scripts **as Administrator** where noted (the GUI handles this for you). Eac
 
 ## GUI and config
 
-- **Run-SetupTools-GUI.bat** — Opens the SetupTools GUI. It asks for Administrator once when it opens. Tick the steps on the left and click **Apply selected**: they appear on the right as a to-do list, each with a status icon, its own progress bar and a live status line, and turn green (OK), yellow (warning) or red (failed). An overall bar shows progress, and clicking a step shows its full output. Steps run hidden; only Auto Login opens its own window, since it asks for a password. Explorer restarts once at the end if needed.
+- **Run-SetupTools-GUI.bat** — Opens the SetupTools GUI (dark theme). It asks for Administrator once when it opens. Steps are grouped in a category tree (Session and login, Performance, Security, Desktop, Hardware); tick a category to select all its steps, and select a step to see what it does. Restart time and extra Defender paths are under **Options**. Click **Run selected** and the steps run hidden as a to-do list on the right, each with a status icon, its own progress bar and a live status line, ending green (OK), yellow (warning) or red (failed); click a step to see its output. Only Auto Login opens its own window, since it asks for a password. Explorer restarts once at the end if needed.
 - **SetupTools-GUI.ps1** — PowerShell script that builds the form and runs the selected batch files.
 - **config.json** — Defaults for the GUI: which checkboxes are checked and the default **Restart time** (e.g. `04:00`). Edit this file to pre-fill your preferred options; the GUI loads it on start. Use **Save as default** in the GUI to write the current choices back to `config.json`.
 
@@ -38,8 +38,14 @@ Example **config.json**:
 
 ## Tools
 
+### Windows Install (skip the Microsoft account screen)
+- **make-autounattend.bat** — Creates `autounattend.xml` for a Windows 11 install USB: setup creates a local account and skips the "Let's add your Microsoft account" screens, the internet requirement and the privacy questions. Language, region, keyboard and disk choice stay manual. Writes straight to the USB if one is plugged in. The file holds the account password (Base64, not encrypted) and is git-ignored. See **README.txt** in the folder, including the Shift+F10 fallback.
+
+### Microsoft Account
+- **stop-account-prompts.bat** — Turns off "Let's finish setting up your device", the welcome experience after updates, and Start / Settings account notifications. No admin needed. On by default in the GUI.
+
 ### Auto Login
-- **enable-auto-login.bat** — Store credentials so Windows logs in automatically after reboot (registry). *Run as Administrator.*
+- **enable-auto-login.bat** — Store credentials so Windows logs in automatically after reboot (registry). Checks the password before saving it (3 tries), turns off the Windows 11 "Windows Hello only" setting that blocks auto-login, and reports failure to the GUI. *Run as Administrator.*
 - **disable-auto-login.bat** — Remove stored auto-login and turn the feature off.
 
 ### Auto Do Not Disturb
@@ -76,6 +82,8 @@ Example **config.json**:
 - **check-gpu-pcie.ps1** — The check itself; exits 1 if any GPU is below full width.
 
 ### Windows Update
+- **disable-auto-updates.bat** — Stops Windows Update from downloading, installing and restarting on its own, skips driver updates (keeps your GPU driver), and pins the current Windows version so no feature upgrade arrives. Uses the official Windows Update policies (Pro / Enterprise / Education; Home ignores some). Update manually now and then. *Run as Administrator.* On by default in the GUI.
+- **enable-auto-updates.bat** — Undo: back to normal automatic updates.
 - **README.txt** — Explains Active hours, Pause updates, and restart options (no full control via script on all editions).
 - **open-update-settings.bat** — Opens **Settings > Windows Update**.
 

@@ -3,8 +3,13 @@
   For activations, Unreal, TouchDesigner, and long-running installs
 ================================================================================
 
-Windows does not expose full update control via script on all editions.
-Use Settings (run open-update-settings.bat) and this checklist.
+AUTOMATIC: run disable-auto-updates.bat (Administrator; on by default in the GUI).
+It stops automatic downloads, installs and restarts, skips driver updates and
+pins the current Windows version. Undo with enable-auto-updates.bat.
+Works on Pro / Enterprise / Education; Home ignores some of these policies,
+so on Home also use the manual settings below.
+
+MANUAL: Settings (run open-update-settings.bat) and this checklist.
 
 ACTIVE HOURS
 ------------

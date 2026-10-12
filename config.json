@@ -1,6 +1,7 @@
 {
   "defaults": {
     "autoLogin": false,
+    "noAccountPrompts": true,
     "autoDnd": false,
     "restartSchedule": false,
     "restartTime": "04:00",
@@ -13,6 +14,7 @@
     "autoTimeZone": true,
     "taskbarMainOnly": true,
     "darkMode": true,
+    "noAutoUpdates": true,
     "gpuPcieCheck": true
   },
   "notes": {
