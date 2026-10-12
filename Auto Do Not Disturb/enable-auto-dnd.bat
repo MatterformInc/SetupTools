@@ -1,13 +1,27 @@
 @echo off
-:: Install: run DND now, copy DoNotDisturb.bat to Startup, open Startup folder.
+:: Do Not Disturb all day, every day: turns notifications off (current user).
+:: Windows' own DND schedule can't cover a full 24 hours, so this turns toast notifications off instead,
+:: which persists across restarts with nothing running at startup.
+setlocal
 set "STARTUP=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
-set "SCRIPTS=%~dp0scripts"
 
-call "%SCRIPTS%\DoNotDisturb.bat"
-taskkill /f /im explorer.exe >nul 2>&1 & start explorer.exe
-copy /y "%SCRIPTS%\DoNotDisturb.bat" "%STARTUP%\DoNotDisturb.bat" >nul
+echo Turning notifications off (24/7 Do Not Disturb)...
+call "%~dp0scripts\DoNotDisturb.bat"
+if errorlevel 1 (
+    echo Failed to write notification settings.
+    if not defined SETUPTOOLS_GUI pause
+    exit /b 1
+)
 
-echo On many Windows 11 PCs the registry is ignored — turn on DND in the Settings window (or set "During these times" for 24/7).
-start ms-settings:notifications
-explorer "%STARTUP%"
-pause
+:: Older versions copied a .bat to Startup, which Windows can flag with a prompt at logon. Remove it.
+if exist "%STARTUP%\DoNotDisturb.bat" (
+    del "%STARTUP%\DoNotDisturb.bat"
+    echo Removed old DoNotDisturb.bat from Startup ^(no longer needed^).
+)
+
+:: Restart Explorer so the change applies now (the GUI does this once at the end).
+if not defined SETUPTOOLS_GUI (taskkill /f /im explorer.exe >nul 2>&1 & start explorer.exe)
+
+echo Done. Notifications are off all day; this stays set after restarts.
+if not defined SETUPTOOLS_GUI pause
+exit /b 0

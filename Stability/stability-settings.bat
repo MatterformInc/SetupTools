@@ -23,4 +23,4 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v Ta
 
 echo.
 echo Done. Sign out or restart for visual changes to apply.
-pause
+if not defined SETUPTOOLS_GUI pause

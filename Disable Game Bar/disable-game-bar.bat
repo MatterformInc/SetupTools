@@ -31,4 +31,4 @@ if errorlevel 1 (
 echo.
 echo Done. Xbox Game Bar, Record what happened, and Game DVR are disabled.
 echo Sign out or restart for changes to take full effect.
-pause
+if not defined SETUPTOOLS_GUI pause

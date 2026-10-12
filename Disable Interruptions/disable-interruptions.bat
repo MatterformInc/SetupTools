@@ -26,4 +26,4 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" 
 echo.
 echo Done. Display and sleep set to Never on AC; tips/suggestions disabled.
 echo Sign out or restart for some changes to apply.
-pause
+if not defined SETUPTOOLS_GUI pause

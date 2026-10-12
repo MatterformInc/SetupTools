@@ -24,10 +24,10 @@ set "PS=%PS%Add-MpPreference -ExclusionExtension '.umap' -ErrorAction SilentlyCo
 powershell -NoProfile -ExecutionPolicy Bypass -Command "%PS%"
 if errorlevel 1 (
     echo Run this script as Administrator.
-    pause
+    if not defined SETUPTOOLS_GUI pause
     exit /b 1
 )
 
 echo.
 echo Done. Add your own project/cache paths in Defender if needed.
-pause
+if not defined SETUPTOOLS_GUI pause

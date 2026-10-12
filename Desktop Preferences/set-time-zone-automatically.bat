@@ -7,7 +7,7 @@ setlocal
 net session >nul 2>&1
 if errorlevel 1 (
     echo This script needs Administrator rights. Right-click and choose "Run as administrator".
-    pause
+    if not defined SETUPTOOLS_GUI pause
     exit /b 1
 )
 
@@ -29,4 +29,4 @@ w32tm /resync >nul 2>&1
 
 echo Done. Time zone will be detected from location; clock synced.
 echo It can take a minute (or a restart) for the time zone to update.
-pause
+if not defined SETUPTOOLS_GUI pause

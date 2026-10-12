@@ -8,4 +8,4 @@ reg add "%PERS%" /v AppsUseLightTheme /t REG_DWORD /d 0 /f >nul
 reg add "%PERS%" /v SystemUsesLightTheme /t REG_DWORD /d 0 /f >nul
 
 echo Done. Some apps update after they are reopened.
-pause
+if not defined SETUPTOOLS_GUI pause

@@ -28,4 +28,4 @@ powercfg /setactive SCHEME_CURRENT
 
 echo.
 echo Done. High performance plan active; USB selective suspend and PCIe ASPM disabled.
-pause
+if not defined SETUPTOOLS_GUI pause

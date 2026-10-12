@@ -5,6 +5,8 @@ setlocal
 
 echo Checking GPU PCIe link...
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0check-gpu-pcie.ps1"
+set "RC=%errorlevel%"
 
 echo.
-pause
+if not defined SETUPTOOLS_GUI pause
+exit /b %RC%

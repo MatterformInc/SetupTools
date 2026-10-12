@@ -2,13 +2,13 @@
 
 Windows setup and optimization scripts for **activations**, **permanent installations**, and machines running **Unreal Engine** / **TouchDesigner**. Goals: fewer interruptions, less power waste, and more stability (e.g. no 3rd‑party security daemons, sensible power and update behavior).
 
-Run scripts **as Administrator** where noted.
+Run scripts **as Administrator** where noted (the GUI handles this for you). Each .bat still works on its own by double-clicking it.
 
 ---
 
 ## GUI and config
 
-- **Run-SetupTools-GUI.bat** — Opens the SetupTools GUI (checkboxes for each tool, restart-time field, Apply / Save as default / Open config).
+- **Run-SetupTools-GUI.bat** — Opens the SetupTools GUI. It asks for Administrator once when it opens. Tick the steps on the left and click **Apply selected**: they appear on the right as a to-do list, each with a status icon, its own progress bar and a live status line, and turn green (OK), yellow (warning) or red (failed). An overall bar shows progress, and clicking a step shows its full output. Steps run hidden; only Auto Login opens its own window, since it asks for a password. Explorer restarts once at the end if needed.
 - **SetupTools-GUI.ps1** — PowerShell script that builds the form and runs the selected batch files.
 - **config.json** — Defaults for the GUI: which checkboxes are checked and the default **Restart time** (e.g. `04:00`). Edit this file to pre-fill your preferred options; the GUI loads it on start. Use **Save as default** in the GUI to write the current choices back to `config.json`.
 
@@ -43,12 +43,12 @@ Example **config.json**:
 - **disable-auto-login.bat** — Remove stored auto-login and turn the feature off.
 
 ### Auto Do Not Disturb
-- **enable-auto-dnd.bat** — Turns on Do Not Disturb now and copies **DoNotDisturb.bat** to the Startup folder so it runs at every logon. On many Windows 11 builds the registry is ignored; the script opens Notifications settings so you can turn DND on there if needed.
-- **disable-auto-dnd.bat** — Turns DND off and removes **DoNotDisturb.bat** from Startup.
-- **scripts\DoNotDisturb.bat** — Dependency: runs the registry toggle for DND (used by the installer and by Startup).
+- **enable-auto-dnd.bat** — Do Not Disturb all day, every day. Windows' own DND schedule can't cover a full 24 hours, so this turns toast notifications off instead (Notifications master switch + the "Turn off toast notifications" user policy). It stays set after restarts, so nothing runs at startup; it also removes the old `DoNotDisturb.bat` from Startup, which Windows could flag with a prompt at logon.
+- **disable-auto-dnd.bat** — Turns notifications back on.
+- **scripts\DoNotDisturb.bat** — The registry changes used by the installer.
 
 ### Auto Restart Schedule
-- **schedule-restart.bat** — Prompts for a time (e.g. `04:00`), creates a **daily** scheduled task named **Restart PC** that runs `shutdown.exe /r /f` at that time. Never expires.
+- **schedule-restart.bat** — Prompts for a time (e.g. `04:00`), creates a **daily** scheduled task named **Restart PC** that runs `shutdown.exe /r /f` at that time. Runs as SYSTEM, so it fires even when nobody is logged in. Never expires. *Run as Administrator.*
 - **cancel-restart.bat** — Deletes the **Restart PC** scheduled task.
 
 ### Disable Game Bar
@@ -107,4 +107,4 @@ Example **config.json**:
 ## Requirements
 
 - Windows 10/11.
-- Administrator rights for: Auto Login, Disable Game Bar (policy), Power and Performance, Defender Exclusions, Stability (Delivery Optimization), automatic time zone.
+- Administrator rights for: Auto Login, Auto Restart Schedule, Disable Game Bar (policy), Power and Performance, Defender Exclusions, Stability (Delivery Optimization), automatic time zone.
