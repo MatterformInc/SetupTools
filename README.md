@@ -44,6 +44,21 @@ Example **config.json**:
 ### Microsoft Account
 - **stop-account-prompts.bat** — Turns off "Let's finish setting up your device", the welcome experience after updates, and Start / Settings account notifications. No admin needed. On by default in the GUI.
 
+### Boot Interruptions
+- **disable-boot-interruptions.bat** — Blocks every screen that can stop an unattended PC on boot or sign-in, for **all** users (every existing profile plus the default profile new users copy):
+  - no Startup Repair / Automatic Repair screen after a power cut (`bcdedit` recoveryenabled No, bootstatuspolicy IgnoreAllFailures)
+  - no "Let's finish setting up your device" / Microsoft account / backup screens after updates, and no welcome experience
+  - no privacy-settings screen after updates, no first sign-in animation (official policies)
+  - no "Set up Windows Hello / PIN" prompt (official policy), no Ctrl+Alt+Del before sign-in
+  *Run as Administrator.* On by default in the GUI.
+- **enable-boot-interruptions.bat** — Undo.
+
+For the Microsoft account screen during a fresh install, see **Windows Install** below.
+
+### Backup Prompts
+- **disable-backup-prompts.bat** — Opts out of OneDrive folder backup (official `KFMBlockOptIn` policy: no offer to move Desktop/Documents/Pictures into OneDrive, which avoids file locks on project folders) and Windows Backup settings sync and its prompts ("Do not sync" policy), and hides backup nudges in File Explorer and the Start menu. OneDrive itself keeps working. *Run as Administrator.* On by default in the GUI.
+- **enable-backup-prompts.bat** — Undo.
+
 ### Auto Login
 - **enable-auto-login.bat** — Store credentials so Windows logs in automatically after reboot (registry). Checks the password before saving it (3 tries), turns off the Windows 11 "Windows Hello only" setting that blocks auto-login, and reports failure to the GUI. *Run as Administrator.*
 - **disable-auto-login.bat** — Remove stored auto-login and turn the feature off.

@@ -1,7 +1,9 @@
 {
   "defaults": {
     "autoLogin": false,
+    "noBootScreens": true,
     "noAccountPrompts": true,
+    "noBackupPrompts": true,
     "autoDnd": false,
     "restartSchedule": false,
     "restartTime": "04:00",

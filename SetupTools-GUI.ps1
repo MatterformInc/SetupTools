@@ -29,8 +29,12 @@ $ConfigPath = Join-Path $Script:BasePath 'config.json'
 $Tools = @(
     @{ Key = 'autoLogin';            Category = 'Session and login'; Label = 'Auto login';                  Admin = $true;  Default = $false; Script = 'Auto Login\enable-auto-login.bat'; Interactive = $true
        Hint = 'Logs in automatically after a reboot. Asks for the password in its own window. Stores it in the registry.' }
+    @{ Key = 'noBootScreens';        Category = 'Session and login'; Label = 'Skip boot and sign-in screens'; Admin = $true; Default = $true; Script = 'Boot Interruptions\disable-boot-interruptions.bat'
+       Hint = 'For every user: no Startup Repair after power loss, no "finish setting up" / account / backup / privacy screens after updates, no Windows Hello setup prompt, no first sign-in animation, no Ctrl+Alt+Del.' }
     @{ Key = 'noAccountPrompts';     Category = 'Session and login'; Label = 'Stop Microsoft account prompts'; Admin = $false; Default = $true; Script = 'Microsoft Account\stop-account-prompts.bat'
        Hint = 'Turns off "Let''s finish setting up your device" and sign-in nags after updates. For the setup screen itself, use Windows Install\make-autounattend.bat on the install USB.' }
+    @{ Key = 'noBackupPrompts';      Category = 'Session and login'; Label = 'Opt out of backup prompts';   Admin = $true;  Default = $true;  Script = 'Backup Prompts\disable-backup-prompts.bat'; RestartsExplorer = $true
+       Hint = 'Blocks OneDrive folder backup (Desktop/Documents/Pictures), stops Windows Backup settings sync and its prompts, and hides backup nudges in Explorer and Start.' }
     @{ Key = 'autoDnd';              Category = 'Session and login'; Label = 'Do Not Disturb, 24/7';        Admin = $false; Default = $false; Script = 'Auto Do Not Disturb\enable-auto-dnd.bat'; RestartsExplorer = $true
        Hint = 'Turns notifications off all day. Stays set after restarts; nothing runs at startup.' }
     @{ Key = 'restartSchedule';      Category = 'Session and login'; Label = 'Daily restart';               Admin = $true;  Default = $false; Script = 'Auto Restart Schedule\schedule-restart.bat'

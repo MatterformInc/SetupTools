@@ -8,6 +8,11 @@ BIOS / UEFI
 • Auto power recovery when AC returns
   (Power Management / After Power Loss: Power On or Last State)
 
+• Never stop at boot for a keypress
+  (Disable "Wait for F1 if error" / "Halt on errors"; set CPU fan warnings so
+   they don't block boot; fast boot on, boot menu prompt off. Windows-side
+   screens are handled by Boot Interruptions\disable-boot-interruptions.bat)
+
 • Wake on LAN
   (Enable if you need remote wake; disable if you want no network wake)
 
